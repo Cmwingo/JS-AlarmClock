@@ -1,6 +1,8 @@
-function Clock() {}
+function Clock() {
+  this.currentTime = new Date();
+}
 
-Clock.prototype.getTime = function() {
+Clock.prototype.updateTime = function() {
     this.currentTime = moment();
 };
 
