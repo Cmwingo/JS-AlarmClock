@@ -4,7 +4,7 @@ var source = require('vinyl-source-stream');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var utilities = require('gulp-util');
-var buildProduction = untilities.env.production;
+var buildProduction = utilities.env.production;
 var del = require('del');
 var jshint = require('gulp-jshint');
 var browserSync = require('browser-sync').create();
@@ -30,7 +30,7 @@ gulp.task('jsBrowserify', ['concatInterface'], function() {
   return browserify({ entries:['./tmp/allConcat.js'] })
   .bundle()
   .pipe(source('app.js'))
-  .pipe(gulp.dest('./temp'))
+  .pipe(gulp.dest('./build/js'))
 });
 // Warning- single' may break gulpfile.js minification
 gulp.task('minifyScripts', ['jsBrowserify'], function() {
@@ -55,7 +55,7 @@ gulp.task("build", ['clean'], function() {
 gulp.task('jshint', function() {
   return gulp.src(['js/*js'])
   .pipe(jshint())
-  .pipe(jshint.repotter('default'));
+  .pipe(jshint.reporter('default'));
 });
 
 gulp.task('bowerJS', function() {
@@ -81,6 +81,10 @@ gulp.task('bowerBuild', ['bower'], function() {
   browserSync.reload();
 });
 
+gulp.task('htmlBuild', function() {
+  browserSync.reload();
+});
+
 gulp.task('serve', function() {
   browserSync.init({
     server: {
@@ -90,4 +94,5 @@ gulp.task('serve', function() {
   });
   gulp.watch(['js/*.js'], ['jsBuild']);
   gulp.watch(['bower.json'], ['bowerBuild']);
+  gulp.watch(['*.html'], ['htmlBuild']);
 });
